@@ -64,7 +64,6 @@ android:layout_margin="8dp">
 
     <EditText
             android:id="@+id/main_name_input"
-            android:text=""
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
