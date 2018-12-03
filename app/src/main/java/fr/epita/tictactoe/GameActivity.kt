@@ -1,11 +1,14 @@
 package fr.epita.tictactoe
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import kotlin.random.Random.Default.nextBoolean
 
 class GameActivity : AppCompatActivity() {
@@ -71,6 +74,15 @@ class GameActivity : AppCompatActivity() {
         return null
     }
 
+    private fun createIntent(name : String, result : Int, date : Date) : Intent {
+        val explicitIntent = Intent(this@GameActivity, ScoreActivity::class.java)
+        explicitIntent.putExtra("name", name)
+        explicitIntent.putExtra("result", result.toString())
+        explicitIntent.putExtra("date", date.toString())
+
+        return explicitIntent
+    }
+
     inner class SquareListener(val id : Int) : View.OnClickListener {
 
         override fun onClick(v: View?) {
@@ -82,12 +94,25 @@ class GameActivity : AppCompatActivity() {
                 gridSize += 1
 
                 val winner = checkWinner()
-                if (winner != null && isYourTurn)
+                if (winner != null && isYourTurn) {
                     Toast.makeText(this@GameActivity, "WIN", Toast.LENGTH_SHORT).show()
-                else if (winner != null && !isYourTurn)
+                    val explicitIntent = createIntent(game_player_name.text.toString(), 3, Date())
+                    startActivity(explicitIntent)
+                }
+
+                else if (winner != null && !isYourTurn) {
                     Toast.makeText(this@GameActivity, "LOOSE", Toast.LENGTH_SHORT).show()
-                else if (gridSize == 9)
+                    val explicitIntent = createIntent(game_player_name.text.toString(), 1, Date())
+                    startActivity(explicitIntent)
+                }
+
+                else if (gridSize == 9) {
                     Toast.makeText(this@GameActivity, "DRAW", Toast.LENGTH_SHORT).show()
+                    val explicitIntent = createIntent(game_player_name.text.toString(), 2, Date())
+                    startActivity(explicitIntent)
+
+                }
+
 
                 isYourTurn = !isYourTurn
                 update()
